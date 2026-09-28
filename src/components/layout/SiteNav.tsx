@@ -5,9 +5,15 @@ export function SiteNav() {
         meayu
       </a>
 
-      <a className="nav-link" href="#how-it-works">
-        How it works
-      </a>
+      <div className="nav-actions">
+        <a className="nav-link" href="#how-it-works">
+          How it works
+        </a>
+
+        <a className="nav-link nav-link-action" href="/workspace">
+          Make something
+        </a>
+      </div>
     </nav>
   );
 }

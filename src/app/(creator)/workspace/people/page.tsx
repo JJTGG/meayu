@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { PeopleHeader } from "@/components/creator/people/PeopleHeader";
 import { createClient } from "@/lib/supabase/server";
 
@@ -21,9 +23,9 @@ export default async function PeoplePage() {
             Please sign in again before viewing the people in your workspace.
           </p>
 
-          <a className="button button-primary" href="/auth">
+          <Link className="button button-primary" href="/auth">
             Sign in
-          </a>
+          </Link>
         </div>
       </section>
     );
@@ -70,40 +72,46 @@ export default async function PeoplePage() {
             specifically for them.
           </p>
 
-          <a
+          <Link
             className="button button-primary"
             href="/workspace/people/new"
           >
             Add a person
-          </a>
+          </Link>
         </div>
       ) : (
         <div className="people-list">
           {people.map((person) => (
-            <article className="person-card" key={person.id}>
-              <div>
-                <span className="people-empty-label">Person</span>
+            <Link
+              href={`/workspace/people/${person.id}`}
+              key={person.id}
+              aria-label={`Open ${person.name}'s space`}
+            >
+              <article className="person-card">
+                <div>
+                  <span className="people-empty-label">Person</span>
 
-                <h2>{person.name}</h2>
+                  <h2>{person.name}</h2>
 
-                {person.relationship ? (
-                  <p className="person-card-relationship">
-                    {person.relationship}
-                  </p>
-                ) : null}
+                  {person.relationship ? (
+                    <p className="person-card-relationship">
+                      {person.relationship}
+                    </p>
+                  ) : null}
 
-                {person.notes ? (
-                  <p className="person-card-notes">{person.notes}</p>
-                ) : null}
-              </div>
+                  {person.notes ? (
+                    <p className="person-card-notes">{person.notes}</p>
+                  ) : null}
+                </div>
 
-              <span className="person-card-date">
-                Added{" "}
-                {new Intl.DateTimeFormat("en", {
-                  dateStyle: "medium",
-                }).format(new Date(person.created_at))}
-              </span>
-            </article>
+                <span className="person-card-date">
+                  Added{" "}
+                  {new Intl.DateTimeFormat("en", {
+                    dateStyle: "medium",
+                  }).format(new Date(person.created_at))}
+                </span>
+              </article>
+            </Link>
           ))}
         </div>
       )}

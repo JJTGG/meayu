@@ -11,12 +11,9 @@ export default async function CreatorLayout({
 }>) {
   const supabase = await createClient();
 
-  const {
-    data: { claims },
-    error,
-  } = await supabase.auth.getClaims();
+  const { data, error } = await supabase.auth.getClaims();
 
-  if (error || !claims?.sub) {
+  if (error || !data?.claims?.sub) {
     redirect("/auth");
   }
 

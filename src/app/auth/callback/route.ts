@@ -36,12 +36,9 @@ export async function GET(request: Request) {
     );
   }
 
-  const {
-    data: { claims },
-    error: claimsError,
-  } = await supabase.auth.getClaims();
+  const { data, error: claimsError } = await supabase.auth.getClaims();
 
-  const userId = claims?.sub;
+  const userId = data?.claims?.sub;
 
   if (claimsError || !userId) {
     await supabase.auth.signOut();

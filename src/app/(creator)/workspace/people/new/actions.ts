@@ -1,24 +1,53 @@
+
 "use server";
 
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 
+const MAX_NAME_LENGTH = 120;
+const MAX_RELATIONSHIP_LENGTH = 80;
+const MAX_CONTEXT_LENGTH = 4000;
+
 export type CreatePersonState = {
   error: string | null;
 };
+
+function readTextField(formData: FormData, fieldName: string): string {
+  const value = formData.get(fieldName);
+
+  return typeof value === "string" ? value.trim() : "";
+}
 
 export async function createPerson(
   _previousState: CreatePersonState,
   formData: FormData,
 ): Promise<CreatePersonState> {
-  const name = String(formData.get("name") ?? "").trim();
-  const relationship = String(formData.get("relationship") ?? "").trim();
-  const context = String(formData.get("context") ?? "").trim();
+  const name = readTextField(formData, "name");
+  const relationship = readTextField(formData, "relationship");
+  const context = readTextField(formData, "context");
 
   if (!name) {
     return {
       error: "Enter their name.",
+    };
+  }
+
+  if (name.length > MAX_NAME_LENGTH) {
+    return {
+      error: `Keep their name to ${MAX_NAME_LENGTH} characters or fewer.`,
+    };
+  }
+
+  if (relationship.length > MAX_RELATIONSHIP_LENGTH) {
+    return {
+      error: `Keep the relationship to ${MAX_RELATIONSHIP_LENGTH} characters or fewer.`,
+    };
+  }
+
+  if (context.length > MAX_CONTEXT_LENGTH) {
+    return {
+      error: `Keep the context to ${MAX_CONTEXT_LENGTH.toLocaleString("en-US")} characters or fewer.`,
     };
   }
 

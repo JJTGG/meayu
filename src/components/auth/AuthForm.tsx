@@ -1,3 +1,4 @@
+
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
@@ -17,7 +18,9 @@ export function AuthForm() {
 
     if (error === "callback") {
       setStatus("error");
-      setMessage("That sign-in link could not be completed. Please request a new one.");
+      setMessage(
+        "That sign-in link could not be completed. Please request a new one.",
+      );
     }
   }, []);
 
@@ -35,27 +38,32 @@ export function AuthForm() {
     setStatus("sending");
     setMessage("");
 
-    const supabase = createClient();
+    try {
+      const supabase = createClient();
 
-    const redirectTo = new URL("/auth/callback", window.location.origin);
-    redirectTo.searchParams.set("next", "/workspace");
+      const redirectTo = new URL("/auth/callback", window.location.origin);
+      redirectTo.searchParams.set("next", "/workspace");
 
-    const { error } = await supabase.auth.signInWithOtp({
-      email: normalizedEmail,
-      options: {
-        shouldCreateUser: true,
-        emailRedirectTo: redirectTo.toString(),
-      },
-    });
+      const { error } = await supabase.auth.signInWithOtp({
+        email: normalizedEmail,
+        options: {
+          shouldCreateUser: true,
+          emailRedirectTo: redirectTo.toString(),
+        },
+      });
 
-    if (error) {
+      if (error) {
+        setStatus("error");
+        setMessage("We could not send the sign-in link. Please try again.");
+        return;
+      }
+
+      setStatus("sent");
+      setMessage("Check your email for your Meayu sign-in link.");
+    } catch {
       setStatus("error");
       setMessage("We could not send the sign-in link. Please try again.");
-      return;
     }
-
-    setStatus("sent");
-    setMessage("Check your email for your Meayu sign-in link.");
   }
 
   const isSending = status === "sending";
@@ -90,7 +98,11 @@ export function AuthForm() {
           />
         </label>
 
-        <button className="button button-primary" type="submit" disabled={isSending}>
+        <button
+          className="button button-primary"
+          type="submit"
+          disabled={isSending}
+        >
           {isSending ? "Sending..." : "Send sign-in link"}
         </button>
 

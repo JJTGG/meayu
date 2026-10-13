@@ -1,23 +1,39 @@
+
 import { NextResponse } from "next/server";
 
 import { createClient } from "@/lib/supabase/server";
 
-function safeNextPath(value: string | null) {
-  if (!value) {
+function safeNextPath(value: string | null, origin: string) {
+  if (
+    !value ||
+    !value.startsWith("/") ||
+    value.startsWith("//") ||
+    value.includes("\\") ||
+    /[\u0000-\u001f\u007f]/.test(value)
+  ) {
     return "/workspace";
   }
 
-  if (!value.startsWith("/") || value.startsWith("//")) {
+  try {
+    const target = new URL(value, origin);
+
+    if (target.origin !== origin) {
+      return "/workspace";
+    }
+
+    return `${target.pathname}${target.search}${target.hash}`;
+  } catch {
     return "/workspace";
   }
-
-  return value;
 }
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
-  const next = safeNextPath(requestUrl.searchParams.get("next"));
+  const next = safeNextPath(
+    requestUrl.searchParams.get("next"),
+    requestUrl.origin,
+  );
 
   if (!code) {
     return NextResponse.redirect(

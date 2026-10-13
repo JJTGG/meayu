@@ -1,6 +1,7 @@
+
 export function ClosingSection() {
   return (
-    <section className="closing-section" id="start">
+    <section className="closing-section">
       <p className="eyebrow">Something worth making</p>
 
       <h2>
@@ -9,7 +10,7 @@ export function ClosingSection() {
         You just need somewhere to put it.
       </h2>
 
-      <a className="button button-primary" href="#start">
+      <a className="button button-primary" href="/workspace">
         Make something
       </a>
     </section>

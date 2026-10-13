@@ -51,26 +51,33 @@ export async function createPerson(
     };
   }
 
-  const supabase = await createClient();
-  const claimsResult = await supabase.auth.getClaims();
-  const userId = claimsResult.data?.claims?.sub;
+  try {
+    const supabase = await createClient();
+    const claimsResult = await supabase.auth.getClaims();
+    const userId = claimsResult.data?.claims?.sub;
 
-  if (claimsResult.error || !userId) {
+    if (claimsResult.error || !userId) {
+      return {
+        error: "Your session could not be verified. Please sign in again.",
+      };
+    }
+
+    const { error } = await supabase.from("people").insert({
+      user_id: userId,
+      name,
+      relationship: relationship || null,
+      notes: context || null,
+    });
+
+    if (error) {
+      return {
+        error: "We could not save this person. Please try again.",
+      };
+    }
+  } catch {
     return {
-      error: "Your session could not be verified. Please sign in again.",
-    };
-  }
-
-  const { error } = await supabase.from("people").insert({
-    user_id: userId,
-    name,
-    relationship: relationship || null,
-    notes: context || null,
-  });
-
-  if (error) {
-    return {
-      error: "We could not save this person. Please try again.",
+      error:
+        "We could not complete this request. Check your connection and try again.",
     };
   }
 

@@ -1,3 +1,4 @@
+
 export function Hero() {
   return (
     <section className="hero">
@@ -16,7 +17,7 @@ export function Hero() {
         </p>
 
         <div className="hero-actions">
-          <a className="button button-primary" href="#start">
+          <a className="button button-primary" href="/workspace">
             Make something
           </a>
 

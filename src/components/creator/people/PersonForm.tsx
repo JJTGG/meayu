@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useActionState } from "react";
@@ -39,6 +40,7 @@ export function PersonForm() {
             type="text"
             placeholder="Their name"
             autoComplete="name"
+            maxLength={120}
             required
             disabled={pending}
           />
@@ -52,6 +54,7 @@ export function PersonForm() {
             type="text"
             placeholder="e.g. friend, sister, partner"
             autoComplete="off"
+            maxLength={80}
             disabled={pending}
           />
         </label>
@@ -63,6 +66,7 @@ export function PersonForm() {
             name="context"
             placeholder="Anything useful to remember about this person..."
             rows={6}
+            maxLength={4000}
             disabled={pending}
           />
         </label>

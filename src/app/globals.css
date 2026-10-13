@@ -478,7 +478,7 @@ button {
   }
 }
 
-  .people-header {
+.people-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -675,7 +675,8 @@ button {
     width: 100%;
   }
 }
-  .auth-page {
+
+.auth-page {
   width: min(100% - 40px, 1180px);
   min-height: 100vh;
   margin: 0 auto;
@@ -799,6 +800,7 @@ button {
     gap: 14px;
   }
 }
+
 /* Component-aligned styles: current marketing and creator workspace markup. */
 .hero {
   display: grid;
@@ -1026,7 +1028,9 @@ button {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--white);
-  transition: border-color 160ms ease, transform 160ms ease;
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease;
 }
 
 .people-list > a:hover .person-card {
@@ -1249,5 +1253,19 @@ button {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Desktop hero refinement validated in the local browser harness. */
+@media (min-width: 761px) {
+  .hero {
+    padding: clamp(56px, 5.5vw, 76px) 0 clamp(64px, 6vw, 88px);
+    grid-template-columns: minmax(0, 1.18fr) minmax(280px, 0.82fr);
+    gap: clamp(28px, 4vw, 56px);
+  }
+
+  .hero h1 {
+    font-size: clamp(3.25rem, 5.5vw, 5.1rem);
+    line-height: 0.98;
   }
 }
